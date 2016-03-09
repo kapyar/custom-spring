@@ -13,8 +13,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class SaxParser extends DefaultHandler implements Parser {
-
+	
 	List<Bean> beanList;
+	List<Bean> interceptorList;
 	String xmlFileName;
 	String tmpValue;
 	Bean beanTmp;
@@ -22,10 +23,15 @@ public class SaxParser extends DefaultHandler implements Parser {
 	public List<Bean> getBeanList() {
 		return beanList;
 	}
+	
+	public List<Bean> getInterceptorList() {
+		return interceptorList;
+	}
         
     public SaxParser(String xmlFileName) {
     	this.xmlFileName = xmlFileName;
-    	beanList = new ArrayList<Bean>();  
+    	beanList = new ArrayList<Bean>();
+    	interceptorList = new ArrayList<Bean>();
     	parseDocument();
     }
     
@@ -56,7 +62,7 @@ public class SaxParser extends DefaultHandler implements Parser {
     @Override
     public void startElement(String s, String s1, String elementName, Attributes attributes) throws SAXException {
         
-        if (elementName.equalsIgnoreCase("bean")) {
+        if (elementName.equalsIgnoreCase("bean") || elementName.equalsIgnoreCase("interceptor")) {
             beanTmp = new Bean();
             beanTmp.setName(attributes.getValue("id"));
             beanTmp.setClassName(attributes.getValue("class"));
@@ -77,7 +83,11 @@ public class SaxParser extends DefaultHandler implements Parser {
     public void endElement(String s, String s1, String element) throws SAXException {
         if (element.equals("bean")) {
             beanList.add(beanTmp);
-        }        
+        }
+        
+        if (element.equals("interceptor")) {
+            interceptorList.add(beanTmp);
+        }
     }
     
     @Override

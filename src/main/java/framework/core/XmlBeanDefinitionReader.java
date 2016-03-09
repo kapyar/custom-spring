@@ -10,6 +10,7 @@ public class XmlBeanDefinitionReader {
 	public static enum ParserTypes {DOM, SAX, StAX};
 	
 	private List<Bean> beanList;
+	private List<Bean> interceptorList;
 	private ParserTypes parserType;
 	private boolean validating;
 	
@@ -20,6 +21,10 @@ public class XmlBeanDefinitionReader {
 	
 	public List<Bean> getBeanList() {
 		return beanList;
+	}
+	
+	public List<Bean> getInterceptorList() {
+		return interceptorList;
 	}
 	
 	public boolean getValidating() {
@@ -39,6 +44,7 @@ public class XmlBeanDefinitionReader {
 		switch (parserType) {
 			case SAX:
 				beanList = new SaxParser(fileName).getBeanList();
+				interceptorList = new SaxParser(fileName).getInterceptorList();
 			break;
 			default:
 				throw new IllegalArgumentException();

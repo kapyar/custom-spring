@@ -10,14 +10,15 @@ import framework.parsers.Bean;
 public class XmlBeanFactory implements BeanFactory {
 	
 	HashMap<String, Object> beanTable = new HashMap<String, Object>();
+	HashMap<String, Object> interceptorTable = new HashMap<String, Object>();
 	
 	XmlBeanFactory(String xmlFilePath, XmlBeanDefinitionReader xbdr) {		
 		xbdr.loadBeanDefinitions(xmlFilePath);		
 		generateBeans(xbdr.getBeanList());
+		setupInterceptors(xbdr.getInterceptorList());
 	}
 	
-	private void generateBeans(List<Bean> beanList) {
-				
+	private void generateBeans(List<Bean> beanList) {				
 		for (Bean b : beanList) {
 			try {
 				final Class<?> clazz = Class.forName(b.getClassName());
@@ -72,8 +73,19 @@ public class XmlBeanFactory implements BeanFactory {
 				}
 
 				beanTable.put(b.getName(), object);
+			} catch(Exception ex) {
+				ex.printStackTrace();
 			}
-			catch(Exception ex) {
+		}
+	}
+	
+	private void setupInterceptors(List<Bean> interceptorList) {
+		for (Bean b : interceptorList) {
+			try {
+				final Class<?> clazz = Class.forName(b.getClassName());				
+				Object interceptor = clazz.getConstructor().newInstance();
+				interceptorTable.put(b.getName(), interceptor);
+			} catch(Exception ex) {
 				ex.printStackTrace();
 			}
 		}
@@ -86,6 +98,10 @@ public class XmlBeanFactory implements BeanFactory {
 	@SuppressWarnings("unchecked")
 	public <T> T getBean(String string, Class<T> type) {
 		return (T) beanTable.get(string);
+	}
+	
+	public Object[] getInterceptors() {
+		return (Object[]) interceptorTable.values().toArray();
 	}
 
 }
