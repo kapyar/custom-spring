@@ -45,7 +45,7 @@ public class XmlBeanDefinitionReader {
 			case SAX:
 				beanList = new SaxParser(fileName).getBeanList();
 				interceptorList = new SaxParser(fileName).getInterceptorList();
-			break;
+				break;
 			default:
 				throw new IllegalArgumentException();
 		}

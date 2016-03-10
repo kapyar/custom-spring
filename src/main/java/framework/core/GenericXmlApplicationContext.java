@@ -2,11 +2,32 @@ package framework.core;
 
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Optional;
+import java.util.function.Predicate;
 
 import framework.core.XmlBeanDefinitionReader.ParserTypes;
 
 public class GenericXmlApplicationContext {
+	
+	private static class ConfigurationException extends RuntimeException {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -2684645760336447485L;
+		
+		public ConfigurationException(String e) {
+			super(e);
+		}
+	}
+	
+	private static final Predicate<Class<?>> canInstantiate(Class<?> classToInstantiate) {
+		return testClass -> 
+			!testClass.isInterface() && classToInstantiate.isAssignableFrom(testClass);
+	}
+	
+	private static final Predicate<Class<?>> isTheSameClassAs(Class<?> anotherClass) {
+		return testClass -> 
+			anotherClass.getName().equals(testClass.getName());
+	}
 	
 	private static final String CONFIG_FILE_NAME = GenericXmlApplicationContext.class.getResource("/GS_SpringXMLConfig.xml").getPath();
 	
@@ -28,8 +49,8 @@ public class GenericXmlApplicationContext {
 		this(CONFIG_FILE_NAME);
 		
 		Field[] fields = classObject.getDeclaredFields();
-		for (Field f : fields) {
-			if (f.isAnnotationPresent(Autowiring.class)) {
+		for (Field currentField : fields) {
+			if (currentField.isAnnotationPresent(Autowiring.class)) {
 				ClassLoader myCL = Thread.currentThread().getContextClassLoader();
 				Field classLoaderClassesField = null;
 				Class<?> myCLClass = myCL.getClass();
@@ -50,12 +71,37 @@ public class GenericXmlApplicationContext {
 					e.printStackTrace();
 				}
 				
-				Optional<Class<?>> result = 
-						classes.stream().filter(nextClass -> 
-							!nextClass.isInterface() && f.getType().isAssignableFrom(nextClass)).findFirst();
+				Class<?> currentFieldClass = currentField.getType();
+				Class<?> match = null;
+				
+				if (!currentField.getAnnotation(Autowiring.class).value()
+							.equals("java.lang.Void")) {					
+					Class<?> classInAnnotation = null;
+					try {
+						classInAnnotation = Class.forName(currentField.getAnnotation(Autowiring.class)
+								.value());
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					}					
+					match = classInAnnotation;
+				} else {
+					if (!classes.stream().anyMatch(canInstantiate(currentFieldClass))) {				
+						throw new ConfigurationException("No suitable implementation for " 
+								+ currentFieldClass.getName()	+ " found. Please check your configuration file.");
+					}
+
+					match =	classes.stream().filter(canInstantiate(currentFieldClass)).findFirst().get();
+
+					if (classes.stream().anyMatch(canInstantiate(currentFieldClass)
+							.and(isTheSameClassAs(match).negate()))) {
+						throw new ConfigurationException("Ambiguous configuration for "
+								+ currentFieldClass.getName() + ". Please check your configuration file.");
+					}
+				}				
+				
 				try {
-					f.setAccessible(true);
-					f.set(null, result.get().newInstance());
+					currentField.setAccessible(true);
+					currentField.set(null, match.newInstance());
 				} catch (IllegalArgumentException | IllegalAccessException | InstantiationException e) {
 					e.printStackTrace();
 				}

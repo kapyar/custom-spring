@@ -21,6 +21,7 @@ public class MainApp {
 	
 	private static GenericXmlApplicationContext context = new GenericXmlApplicationContext(MainApp.class);
 	
+	//@Autowiring("application.classes.CapitalizingInterceptor")
 	@Autowiring
 	private static Interceptor activeInterceptor;
 	
@@ -203,10 +204,13 @@ public class MainApp {
 		//================ CUSTOM INTERCEPTOR AUTOWIRING THROUGH ANNOTATION DEMO
 		//================
 		//(to prevent recompiling by Eclipse, switch Project > Build Automatically off)
-		System.out.println(context.getBeanFactory().getInterceptors()[0].getClass().getSimpleName() + 
-				" is expected to be loaded...");
-		System.out.println(activeInterceptor.interceptOutputString("TeST InTercepTor"));
+		String output = "TeST InTercepTor";
+		System.out.println("Unintercepted string: " + output);
+		System.out.println("Intercepted string: " + activeInterceptor.interceptOutputString(output));
 		
+		//This block is needed for being able to inspect currently loaded classes 
+		//with tools like Java VisualVM
+		System.out.println("Press any key to exit...");
 		try {
 			System.in.read();
 		} catch (IOException e) {
