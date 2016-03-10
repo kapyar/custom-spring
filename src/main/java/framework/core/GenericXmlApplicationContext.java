@@ -1,8 +1,8 @@
 package framework.core;
 
 import java.lang.reflect.Field;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import framework.core.XmlBeanDefinitionReader.ParserTypes;
 
@@ -49,23 +49,20 @@ public class GenericXmlApplicationContext {
 				} catch (IllegalArgumentException | IllegalAccessException e) {
 					e.printStackTrace();
 				}
-				Iterator<Class<?>> it = classes.iterator();
-				while (it.hasNext()) {
-					Class<?> nextClass = it.next();
-					if (!nextClass.isInterface() && f.getType().isAssignableFrom(nextClass)) {
-						try {
-							f.setAccessible(true);
-							f.set(null, nextClass.newInstance());
-						} catch (IllegalArgumentException | IllegalAccessException | InstantiationException e) {
-							e.printStackTrace();
-						}
-						break;
-					}
+				
+				Optional<Class<?>> result = 
+						classes.stream().filter(nextClass -> 
+							!nextClass.isInterface() && f.getType().isAssignableFrom(nextClass)).findFirst();
+				try {
+					f.setAccessible(true);
+					f.set(null, result.get().newInstance());
+				} catch (IllegalArgumentException | IllegalAccessException | InstantiationException e) {
+					e.printStackTrace();
 				}
 			}
-		}
-	}
-	
+		};
+	}				
+
 	public GenericXmlApplicationContext(String xmlFileLocation) {
 		this.xmlFileLocation = xmlFileLocation;
 		reader = new XmlBeanDefinitionReader();
