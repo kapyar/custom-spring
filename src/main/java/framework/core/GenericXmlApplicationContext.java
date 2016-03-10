@@ -74,8 +74,7 @@ public class GenericXmlApplicationContext {
 				Class<?> currentFieldClass = currentField.getType();
 				Class<?> match = null;
 				
-				if (!currentField.getAnnotation(Autowiring.class).value()
-							.equals("java.lang.Void")) {					
+				if (!currentField.getAnnotation(Autowiring.class).value().isEmpty()) {					
 					Class<?> classInAnnotation = null;
 					try {
 						classInAnnotation = Class.forName(currentField.getAnnotation(Autowiring.class)

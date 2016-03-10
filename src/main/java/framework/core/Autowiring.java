@@ -8,5 +8,5 @@ import java.lang.annotation.ElementType;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Autowiring {
-	String value() default "java.lang.Void";
+	String value() default "";
 }
