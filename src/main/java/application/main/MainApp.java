@@ -30,6 +30,8 @@ public class MainApp {
 		
 		private String name = "Anonymous";
 		private String className;
+		private String superClassName;
+		private Class<?>[] implementedInterfaces;
 		private Field[] fields;
 		private Constructor<?>[] constructors;
 		private Method[] methods;
@@ -39,7 +41,9 @@ public class MainApp {
 				this.name = name;
 			}
 			
-			this.className = o.getClass().getName();			
+			this.className = o.getClass().getName();
+			this.superClassName = o.getClass().getSuperclass().getName();
+			this.implementedInterfaces = o.getClass().getInterfaces();
 			this.fields = o.getClass().getDeclaredFields();
 			this.constructors = o.getClass().getDeclaredConstructors();
 			this.methods = o.getClass().getMethods();
@@ -47,8 +51,18 @@ public class MainApp {
 		
 		public String toString() {
 			StringBuilder objectInfo = new StringBuilder();
-			objectInfo.append("Inspecting object " + name + ":\n");
-			objectInfo.append("Class name: " + className + "\n");
+			objectInfo.append("Inspecting " + name + ":\n");
+			objectInfo.append("Class name: " + className + "\n");			
+			objectInfo.append("Parent class: " + superClassName + "\n");			
+			objectInfo.append("Implemented interfaces:");
+			if (implementedInterfaces.length == 0) {
+				objectInfo.append(" none\n");
+			} else {
+				objectInfo.append("\n");
+				for (Class<?> ii : implementedInterfaces) {
+					objectInfo.append("\t* " + ii.getName() + "\n");
+				}
+			}
 			
 			objectInfo.append("Attributes:\n");
 			for (Field f : fields) {
