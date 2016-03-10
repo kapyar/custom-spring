@@ -22,7 +22,7 @@ public class MainApp {
 	private static GenericXmlApplicationContext context = new GenericXmlApplicationContext(MainApp.class);
 	
 	@Autowiring
-	private static Interceptor currentInterceptor;
+	private static Interceptor activeInterceptor;
 	
 	private static class ObjectInfo {
 		
@@ -205,7 +205,7 @@ public class MainApp {
 		//(to prevent recompiling by Eclipse, switch Project > Build Automatically off)
 		System.out.println(context.getBeanFactory().getInterceptors()[0].getClass().getSimpleName() + 
 				" is expected to be loaded...");
-		System.out.println(currentInterceptor.interceptOutputString("TeST InTercepTor"));
+		System.out.println(activeInterceptor.interceptOutputString("TeST InTercepTor"));
 		
 		try {
 			System.in.read();
