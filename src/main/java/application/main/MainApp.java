@@ -21,6 +21,7 @@ public class MainApp {
 	
 	private static GenericXmlApplicationContext context = new GenericXmlApplicationContext(MainApp.class);
 	
+	//@Autowiring("java.lang.String") /* <- throws 'Class specified in annotation is not compatible' exception*/
 	//@Autowiring("application.classes.CapitalizingInterceptor")
 	@Autowiring
 	private static Interceptor activeInterceptor;

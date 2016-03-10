@@ -82,8 +82,14 @@ public class GenericXmlApplicationContext {
 								.value());
 					} catch (ClassNotFoundException e) {
 						e.printStackTrace();
-					}					
-					match = classInAnnotation;
+					}
+					if (canInstantiate(currentFieldClass).test(classInAnnotation)) {
+						match = classInAnnotation;
+					} else {
+						throw new ConfigurationException("Class specified in annotation is not compatible with " 
+								+ currentFieldClass.getName()	+ ".");
+					}
+					
 				} else {
 					if (!classes.stream().anyMatch(canInstantiate(currentFieldClass))) {				
 						throw new ConfigurationException("No suitable implementation for " 
