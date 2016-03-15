@@ -13,50 +13,50 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class SaxParser extends DefaultHandler implements Parser {
-	
-	List<Bean> beanList;
-	List<Bean> interceptorList;
-	String xmlFileName;
-	String tmpValue;
-	Bean beanTmp;
-	
-	public List<Bean> getBeanList() {
-		return beanList;
-	}
-	
-	public List<Bean> getInterceptorList() {
-		return interceptorList;
-	}
+    
+    List<Bean> beanList;
+    List<Bean> interceptorList;
+    String xmlFileName;
+    String tmpValue;
+    Bean beanTmp;
+    
+    public List<Bean> getBeanList() {
+        return beanList;
+    }
+    
+    public List<Bean> getInterceptorList() {
+        return interceptorList;
+    }
         
     public SaxParser(String xmlFileName) {
-    	this.xmlFileName = xmlFileName;
-    	beanList = new ArrayList<Bean>();
-    	interceptorList = new ArrayList<Bean>();
-    	parseDocument();
+        this.xmlFileName = xmlFileName;
+        beanList = new ArrayList<Bean>();
+        interceptorList = new ArrayList<Bean>();
+        parseDocument();
     }
     
     private void parseDocument() {
-    	SAXParserFactory factory = SAXParserFactory.newInstance();
-    	
-    	try {
-    		SAXParser parser = factory.newSAXParser();
-    		parser.parse(xmlFileName, this);
-    	} catch (ParserConfigurationException e) {
-    		System.out.println("ParserConfig error");
-    	} catch (SAXException e) {
-    		System.out.println("SAXException : xml not well formed");
-    	} catch (IOException e) {
-    		System.out.println("IO error");
-    	}
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        
+        try {
+            SAXParser parser = factory.newSAXParser();
+            parser.parse(xmlFileName, this);
+        } catch (ParserConfigurationException e) {
+            System.out.println("ParserConfig error");
+        } catch (SAXException e) {
+            System.out.println("SAXException : xml not well formed");
+        } catch (IOException e) {
+            System.out.println("IO error");
+        }
     }
     
     public String toString() {
-    	String res = "";
-    	for (Bean tmpB : beanList) {
-    		res += tmpB.toString() + "; ";
-    	}
-    	
-    	return res;
+        String res = "";
+        for (Bean tmpB : beanList) {
+            res += tmpB.toString() + "; ";
+        }
+        
+        return res;
     }
     
     @Override
@@ -69,7 +69,7 @@ public class SaxParser extends DefaultHandler implements Parser {
         }
         
         if (elementName.equalsIgnoreCase("constructor-arg")) {
-        	beanTmp.getConstructorArg().add(attributes.getValue("type"));
+            beanTmp.getConstructorArg().add(attributes.getValue("type"));
             beanTmp.getConstructorArg().add(attributes.getValue("value"));
         }
         

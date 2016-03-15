@@ -1,5 +1,5 @@
 package application.classes;
 
 public interface Transport {
-	public void getTransport();
+    public void getTransport();
 }

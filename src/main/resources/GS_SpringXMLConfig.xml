@@ -20,9 +20,10 @@
   </bean>
   
   <interceptor id="interceptor1" class="application.classes.CapitalizingInterceptor"/>
-  <!-- 
+ 
   <interceptor id="interceptor2" class="application.classes.LowerCasingInterceptor"/>
-  -->
+
+  
   
 
   <!-- 
