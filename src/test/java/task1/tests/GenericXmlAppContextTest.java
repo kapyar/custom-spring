@@ -5,9 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.mockito.*;
 
-import application.classes.Bus;
+import application.classes.Transport.Bus;
 import framework.core.GenericXmlApplicationContext;
-import framework.core.XmlBeanDefinitionReader.ParserTypes;
+import framework.core.xmlbean.XmlBeanDefinitionReader.ParserTypes;
 
 
 public class GenericXmlAppContextTest {

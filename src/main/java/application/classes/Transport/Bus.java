@@ -1,4 +1,4 @@
-package application.classes;
+package application.classes.Transport;
 
 public class Bus implements Transport {
     private String message;
@@ -12,6 +12,7 @@ public class Bus implements Transport {
     }
 
     public void setMessage(final String message) {
+
         this.message = message;
     }
 

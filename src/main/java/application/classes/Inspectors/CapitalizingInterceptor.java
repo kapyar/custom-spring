@@ -1,6 +1,6 @@
-package application.classes;
+package application.classes.Inspectors;
 
-import framework.core.Interceptor;
+import framework.core.inspectors.Interceptor;
 
 public class CapitalizingInterceptor implements Interceptor {
 

@@ -1,4 +1,4 @@
-package application.classes;
+package application.classes.Greeting;
 
 public class GreetingServiceImpl implements GreetingService {
     private String message;
@@ -12,6 +12,7 @@ public class GreetingServiceImpl implements GreetingService {
     }
     
     public void setMessage(String message) {
-        this.message = message;
+
+         this.message = message;
     }
 }

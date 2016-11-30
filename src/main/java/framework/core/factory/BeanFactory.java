@@ -1,4 +1,4 @@
-package framework.core;
+package framework.core.factory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -39,7 +39,7 @@ public interface BeanFactory {
     <T extends Object> T getBean(String string, Class<T> type);
     Object[] getInterceptors();
     
-    default Class<?> getPrimitiveClassForName(String primitiveTypeName) {
+   public static  Class<?> getPrimitiveClassForName(String primitiveTypeName) {
         Class<?> res = null;
 
         if (classLibrary.containsKey(primitiveTypeName)) {
@@ -49,7 +49,7 @@ public interface BeanFactory {
         return res;
     }
     
-    default Object getWrapperClassValueForPrimitiveType(Class<?> primitiveType, String stringValue) {
+   public static Object getWrapperClassValueForPrimitiveType(Class<?> primitiveType, String stringValue) {
         Object res = null;
         
         try {
@@ -63,4 +63,20 @@ public interface BeanFactory {
 
         return res;
     }
+
+    public Object[] getComponents();
+
+    public Object[] getComponentsValues();
+
+    public Object[] getServiceNames();
+
+    public Object[] getServiceInstances();
+
+    public Object[] getRepositoriesNames();
+
+    public Object[] getRepositoriesInstances();
+
+    public Object[] getControllerNames();
+
+    public Object[] getControllerInstancess();
 }

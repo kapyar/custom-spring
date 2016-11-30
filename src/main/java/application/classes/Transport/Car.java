@@ -1,4 +1,4 @@
-package application.classes;
+package application.classes.Transport;
 
 public class Car implements Transport {
 

@@ -1,8 +1,8 @@
-package framework.core;
+package framework.core.xmlbean;
 
 import java.util.List;
 
-import framework.parsers.Bean;
+import framework.parsers.entities.Bean;
 import framework.parsers.SaxParser;
 
 public class XmlBeanDefinitionReader {
@@ -13,6 +13,7 @@ public class XmlBeanDefinitionReader {
     private List<Bean> interceptorList;
     private ParserTypes parserType;
     private boolean validating;
+    private String packageName;
     
     public XmlBeanDefinitionReader() {
         parserType = ParserTypes.SAX;
@@ -38,13 +39,23 @@ public class XmlBeanDefinitionReader {
     public void setParserType(ParserTypes parserType) {
         this.parserType = parserType;
     }
-    
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
     public void loadBeanDefinitions(String fileName) {
         
         switch (parserType) {
             case SAX:
-                beanList = new SaxParser(fileName).getBeanList();
+                beanList        = new SaxParser(fileName).getBeanList();
                 interceptorList = new SaxParser(fileName).getInterceptorList();
+                packageName     = new SaxParser(fileName).getPackageToScan();
+
                 break;
             default:
                 throw new IllegalArgumentException();

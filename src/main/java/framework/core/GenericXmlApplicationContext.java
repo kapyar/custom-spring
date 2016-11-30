@@ -4,14 +4,15 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.function.Predicate;
 
-import framework.core.XmlBeanDefinitionReader.ParserTypes;
+import framework.core.factory.BeanFactory;
+import framework.core.factory.XmlBeanFactory;
+import framework.core.xmlbean.XmlBeanDefinitionReader;
+import framework.core.xmlbean.XmlBeanDefinitionReader.ParserTypes;
+import framework.core.annotations.Autowiring;
 
 public class GenericXmlApplicationContext {
     
     private static class ConfigurationException extends RuntimeException {
-        /**
-         * 
-         */
         private static final long serialVersionUID = -2684645760336447485L;
         
         public ConfigurationException(String e) {
@@ -19,12 +20,12 @@ public class GenericXmlApplicationContext {
         }
     }
     
-    private static final Predicate<Class<?>> canInstantiate(Class<?> classToInstantiate) {
+    public static final Predicate<Class<?>> canInstantiate(Class<?> classToInstantiate) {
         return testClass -> 
             !testClass.isInterface() && classToInstantiate.isAssignableFrom(testClass);
     }
     
-    private static final Predicate<Class<?>> isTheSameClassAs(Class<?> anotherClass) {
+    public static final Predicate<Class<?>> isTheSameClassAs(Class<?> anotherClass) {
         return testClass -> 
             anotherClass.getName().equals(testClass.getName());
     }
@@ -135,4 +136,5 @@ public class GenericXmlApplicationContext {
     public BeanFactory getBeanFactory(){
         return beanFactory;
     }
+
 }

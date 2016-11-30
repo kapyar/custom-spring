@@ -7,23 +7,24 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 
-import application.classes.Bus;
-import application.classes.Car;
-import application.classes.GreetingService;
-import application.classes.Transport;
-import framework.core.Autowiring;
-import framework.core.BeanFactory;
-import framework.core.GenericXmlApplicationContext;
-import framework.core.Interceptor;
-import framework.core.XmlBeanDefinitionReader.ParserTypes;
+import application.beans.FarFarGalaxy.Ammo.Weapon;
+import application.classes.Greeting.GreetingService;
+import application.classes.Transport.Bus;
+import application.classes.Transport.Car;
+import application.classes.Transport.Garage;
+import application.classes.Transport.Transport;
+import framework.core.*;
+import framework.core.factory.BeanFactory;
+import framework.core.inspectors.Interceptor;
+import framework.core.xmlbean.XmlBeanDefinitionReader.ParserTypes;
+import framework.core.annotations.Autowiring;
 
 public class MainApp {
     
     private static GenericXmlApplicationContext context = new GenericXmlApplicationContext(MainApp.class);
-
+    
     //@Autowiring("java.lang.String") /* <- throws 'Class specified in annotation is not compatible' exception*/
-    @Autowiring("application.classes.LowerCasingInterceptor")
-    //@Autowiring
+    @Autowiring("application.classes.Inspectors.LowerCasingInterceptor")
     private static Interceptor activeInterceptor;
     
     private static class ObjectInfo {
@@ -180,49 +181,44 @@ public class MainApp {
         }
     }    
     
-    public static void main(String[] args) {        
+    public static void main(String[] args) {
+
         context.load(MainApp.class.getResource("/GS_SpringXMLConfig.xml").getPath());
         context.setValidating(true);
         context.setParserType(ParserTypes.SAX);
 
         BeanFactory factory = context.getBeanFactory();
 
-        GreetingService greetingService = 
+        GreetingService greetingService =
                 (GreetingService) factory.getBean("greetingService", GreetingService.class);
-        System.out.println(greetingService.getMessage());
+      System.out.println(greetingService.getMessage());
         
-        Transport bus = 
+        Transport bus =
                 (Bus) factory.getBean("bus", Transport.class);
-        bus.getTransport();
+        System.out.println(bus.toString());
         
         Transport bus2 = 
                 (Bus) factory.getBean("bus2", Transport.class);
         bus2.getTransport();
-        
+        System.out.println(bus.toString());
+
+
         Transport car = 
                 (Car) factory.getBean("car", Transport.class);
+        car.getTransport();
         System.out.println(car.toString());
-        
+
+        Garage garage =  (Garage) factory.getBean("garage",Garage.class);
+        System.out.println(garage);
         //================
         //================ REFLECTION API DEMO
         //================
         System.out.println();
         System.out.println("================ REFLECTION API DEMO ================");
         System.out.println();
-        
-        System.out.println(new ObjectInfo(bus, "bus").toString());
-        System.out.println("==========");
-        System.out.println(new ObjectInfo(bus.toString(), 
-                "String representation of the 'bus' object").toString());
-        
-        //================
-        //================ CUSTOM INTERCEPTOR AUTOWIRING THROUGH ANNOTATION DEMO
-        //================
-        //(to prevent recompiling by Eclipse, switch Project > Build Automatically off)
-        String output = "TeST InTercepTor";
-        System.out.println("Unintercepted string: " + output);
-        System.out.println("Intercepted string: " + activeInterceptor.interceptOutputString(output));
-        
+        Weapon weapon = (Weapon)factory.getBean("deathStar", Weapon.class);
+        System.out.println(new ObjectInfo(weapon, "deathStar"));
+
         //This block is needed for being able to inspect currently loaded classes 
         //with tools like Java VisualVM
         System.out.println("Press any key to exit...");
@@ -231,5 +227,7 @@ public class MainApp {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 }

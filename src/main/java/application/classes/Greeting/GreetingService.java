@@ -1,4 +1,4 @@
-package application.classes;
+package application.classes.Greeting;
 
 public interface GreetingService {
     public String getMessage();

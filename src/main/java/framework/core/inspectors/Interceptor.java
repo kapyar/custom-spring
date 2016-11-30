@@ -1,4 +1,4 @@
-package framework.core;
+package framework.core.inspectors;
 
 public interface Interceptor {
     
