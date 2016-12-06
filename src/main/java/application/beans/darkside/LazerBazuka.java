@@ -16,6 +16,6 @@ public class LazerBazuka {
         this.name = name;
     }
 
-    @Autowiring
-    private OldStormTrooper oldStormTrooper;
+//    @Autowiring
+//    private OldStormTrooper oldStormTrooper;
 }

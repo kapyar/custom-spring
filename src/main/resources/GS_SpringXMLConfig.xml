@@ -44,6 +44,7 @@
     <!-- Comonent -->
 
     <bean id="oldStormTrooper" class="application.beans.darkside.OldStormTrooper"/>
+    <bean id="darkStarDefencePointController" class="application.beans.darkside.DarkStarDefencePointController" />
 
 
 

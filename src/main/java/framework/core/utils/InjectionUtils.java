@@ -69,6 +69,7 @@ public class InjectionUtils {
 
                 try {
                     currentField.setAccessible(true);
+                    //YK sometime throws exception why??
                     currentField.set(null, match.newInstance());
                 } catch (IllegalArgumentException | IllegalAccessException | InstantiationException e) {
                     e.printStackTrace();

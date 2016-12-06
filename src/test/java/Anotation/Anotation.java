@@ -3,10 +3,13 @@ package Anotation;
 import static org.junit.Assert.*;
 import application.beans.FarFarGalaxy.Galaxy;
 import application.beans.darkside.LazerBazuka;
+import application.beans.darkside.SupplyTroopService;
 import framework.core.factory.BeanFactory;
 import framework.core.GenericXmlApplicationContext;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Objects;
 
 public class Anotation {
 
@@ -26,27 +29,63 @@ public class Anotation {
     public void AutowiringTestPositive()
     {
         Galaxy galaxy = beanFactory.getBean("galaxy", Galaxy.class);
-        System.out.println(galaxy);
+        assertTrue("FarFarGalaxy".equals(galaxy.getName()));
     }
 
     @Test
-    public void ComponentTestPositive()
+    public void ComponentLazerBazukaTestPositive()
     {
         final String expected = "SuperMassiveBazuka";
-        LazerBazuka[] lazerBazukas = (LazerBazuka[])beanFactory.getComponents();
+        Object [] obj = beanFactory.getComponentsValues();
 
         boolean result = false;
-        for(int i = 0; i <lazerBazukas.length;++i)
+        for(int i = 0; i <obj.length;++i)
         {
-            if(lazerBazukas[i].getName().equals(expected))
+            if(obj[i] instanceof LazerBazuka)
             {
-                result = true;
+                LazerBazuka bazuka = (LazerBazuka)obj[i];
+                if(expected.equals(bazuka.getName()))
+                {
+                    result = true;
+                }
+
             }
         }
 
         assertTrue(result);
-
     }
+
+    @Test
+    public void ComponentNameOldStormTrooperWithInterceptorTestPositive() {
+        final String expected = "oldstormtrooper";
+
+        Object[] obj = beanFactory.getComponents();
+        boolean result = false;
+        for (int i = 0; i < obj.length; ++i) {
+
+            if (expected.equals(obj[i])) {
+                result = true;
+            }
+        }
+        assertTrue(result);
+    }
+
+    @Test
+    public void ControllerTest()
+    {
+        beanFactory.getControllerNames();
+    }
+
+
+    @Test
+    public void ServiceTest()
+    {
+        Object [] services = beanFactory.getServiceInstances();
+
+        System.out.println((SupplyTroopService)services[0]);
+    }
+
+
 
 
 

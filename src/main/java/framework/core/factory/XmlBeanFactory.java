@@ -37,9 +37,9 @@ public class XmlBeanFactory implements BeanFactory {
         generateBeans(xbdr.getBeanList());
         setupInterceptors(xbdr.getInterceptorList());
 
-//        generateComponents(xbdr.getPackageName());
+        generateComponents(xbdr.getPackageName());
 //        generateControllers(xbdr.getPackageName());
-//        generateServices(xbdr.getPackageName());
+        generateServices(xbdr.getPackageName());
 //        generateRepositories(xbdr.getPackageName());
 
 
